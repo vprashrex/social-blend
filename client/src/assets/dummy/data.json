@@ -1,0 +1,307 @@
+[
+        {
+          "currentLevel" : 12,
+      "id": "1",
+      "email": "farhankolad@gmail.com",
+      "profileImg": {
+        "id": "2",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/61351/1669146062152847.jpg"
+      },
+      "coverImg": {
+        "id": "3",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/61351/16691460623358586.jpg"
+      },
+      "isFeatured": true,
+      "username": "shagufta",
+      "img": [
+        {
+          "id": "4",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/61351/16691468504252667.jpg"
+        },
+        {
+          "id": "5",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/61351/16691460633664348.jpg"
+        },
+        {
+          "id": "6",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/61351/1669146063646361.jpg"      }
+      ],
+      "about":
+        "I am Dylan Kolak, a 21 year old from New York who is on the Mens Gymnastics team at the University of Illinois. I have been a social media creator for the last 3 years on Tiktok and Instagram with around 730,000 followers on Tiktok and 60,000 followers on Instagram. I am very interested in working and collaborating with companies to promote their brand on my social media platforms. I am very flexible with the types of brands I would work with. Primarily I am interested in Fitness, Fashion, Photography, Food/drink, Travel, Lifestyle, Ocean conservation, and Environmentalism. I am also studying Marine Biology with a minor in acting and filmmaking at the University of Illinois. I am currently a Senior, but I have 5 years of eligibility so I will be competing for UIUC for another year.",
+      "heading":
+        "Fitness/fashion/lifestyle content creator and D1 Gymnast at UIUC",
+      "name": "Dylan Kolak",
+      "address": "Champaign, IL, United States",
+      "handles": [
+        {
+          "name": "instagram",
+          "url": "https://www.instagram.com/dylan.kolak/"
+        },
+        {
+          "name": "youtube",
+          "url": "https://www.youtube.com/@dylan.kolak."
+        }
+      ],
+      "packages": [
+        {
+          "id": "7",
+          "heading": "Promotional Photo",
+          "handle": "Instagram",
+          "price": 1000,
+          "about":
+            "I will post product/brand photos that I can take with either my Iphone or my Sony a6100 Camera. I am very open to the types of brands I will work with"
+        },
+        {
+          "id": "8",
+          "heading": "Promotional Story post",
+          "handle": "Instagram",
+          "price": 2500,
+          "about":
+            "I am also willing to make story posts on my Instagram to promote a product or brand."
+        },
+        {
+          "id": "9",
+          "heading": "Promotional Video",
+          "handle": "Youtube",
+          "price": 3000,
+          "about":
+            "I can feature a product either naturally in one of my videos, or I can make it more of a promotional video to display a product or brand. I am open to these types of videos I will make. They can be in the gym or at my apartment at home. I shoot my videos with a Sony a6100 with very high definition."
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "email": "farhankolad12@gmail.com",
+      "profileImg": {
+        "id": "34567",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/5261/16098944837669966.jpg"
+      },
+      "coverImg": {
+        "id": "987654",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/5261/16098954186004887.jpg"
+      },
+      "isFeatured": true,
+      "username": "kala",
+      "img": [
+        {
+          "id": "8675676",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/5261/1609894483893719.jpg"
+        },
+        {
+          "id": "54123213",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/5261/16098944840685241.jpg"
+        },
+        {
+          "id": "87654123",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/5261/1609895418931195.jpg"      }
+      ],
+      "about":
+        "I’m a local Alaskan who has created more viral nature content then any other creator in my nIche.",
+      "heading":
+        "Nature and relaxing videos along with exploring wilderness",
+      "name": "John Derting",
+      "address": "Anchorage, AK, United States",
+      "handles": [
+        {
+          "name": "instagram",
+          "url": "https://www.instagram.com/johnderting/"
+        }
+      ],
+      "packages": [
+        {
+          "id": "23456787654",
+          "heading": "5 story videos",
+          "handle": "Instagram",
+          "price": 4000,
+          "about":
+            "Buyer gets clickable link in post and I average 500 to 2000 link clicks per 24hr story. That also means every story gets 20k to 50k views each. I can send screenshots to support this data"
+        },
+        {
+          "id": "23456cc787654",
+          "heading": "Youtube Video Promotion",
+          "handle": "Youtube",
+          "price": 5000,
+          "about":
+            "Buyer gets clickable link in post and I average 500 to 2000 link clicks per 24hr story. That also means every story gets 20k to 50k views each. I can send screenshots to support this data"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "email": "hashamkolad@gmail.com",
+      "profileImg": {
+        "id": "456789876",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/22278/16257728055081422.jpg"
+      },
+      "coverImg": {
+        "id": "3456776543",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/22278/1625771791441295.jpg"
+      },
+      "isFeatured": true,
+      "username": "xivaga2298",
+      "img": [
+        {
+          "id": "7896214",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/22278/1625771791544153.jpg"
+        },
+        {
+          "id": "378563",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/22278/16257717916391819.jpg"
+        },
+        {
+          "id": "7410",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/22278/16257717917428913.jpg"      }
+      ],
+      "about":
+        "I create dreamy works of art using digital editing tools from my phone and computer from original photos I've taken all around the world. My work centers around meditation, spiritual growth, the beauty of nature, spiritual awakening, and dreamy visuals. My followers vary in age and location, but many of them are teens and young adults. My content is for everyone to enjoy, as it is meant to relax and soothe people during these stressful times.",
+      "heading":
+        "Digital Artist and Creator of Dreamy Vibes",
+      "name": "Anna Yermilov",
+      "address": "Media, PA, United States",
+      "handles": [
+        {
+          "name": "instagram",
+          "url": "https://www.instagram.com/test/"
+        }
+      ],
+      "packages": [
+        {
+          "id": "78635",
+          "heading": "Instagram Feed Post",
+          "handle": "Instagram",
+          "price": 500,
+          "about":
+            "I will create an Instagram post capturing your product and speaking about the product in the caption. I will add up to 4 photos in one post. I'm also able to tag your page in the photo if needed"
+        },
+        {
+          "id": "852586",
+          "heading": "Instagram Reel Post",
+          "handle": "Instagram",
+          "price": 2800,
+          "about":
+            "I will create a 60 second video of me discussing, using, and/or showing your product and post it to my Instagram feed. I will also tag your page in the post."
+        },
+        {
+          "id": "78ds525",
+          "heading": "Youtube Video Promotion",
+          "handle": "Youtube",
+          "price": 3500,
+          "about":
+            "I will create 2 beautiful high quality images promoting your product in the ."
+        }
+      ]
+    },
+    {
+      "id": "5456u",
+      "email": "kalatopa@gmail.com",
+      "profileImg": {
+        "id": "34567",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/32285/16356681192383535.jpg"
+      },
+      "coverImg": {
+        "id": "34567uid",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/32285/16356694635561953.jpg"
+      },
+      "isFeatured": false,
+      "username": "final-test",
+      "img": [
+  
+      ],
+      "about":
+        "I create comedic content that's often music or sports related for a very diverse audience. With nearly 15 years of TV experience, I'm able to utilize my videography, editing & voiceover skills to bring any kind of video content to life.",
+      "heading":
+        "Emmy award-winning TV reporter & content creator",
+      "name": "Kevin Cuenca",
+      "address": "Los Angeles, CA, United States",
+      "handles": [
+        {
+          "name": "instagram",
+          "url": "https://www.instagram.com/kevin.hart/"
+        },
+        {
+          "name": "youtube",
+          "url": "https://www.youtube.com/@fdvndfsvfd."
+        }
+      ],
+      "packages": [
+        {
+          "id": "7",
+          "handle": "Instagram",
+          "heading": "Promotional Photo",
+          "about":
+          "I will post product/brand photos that I can take with either my Iphone or my Sony a6100 Camera. I am very open to the types of brands I will work with",
+          "price": 1000
+        },
+        {
+          "id": "8",
+          "heading": "Promotional Story post",
+          "handle": "Instagram",
+          "price": 2500,
+          "about":
+            "I am also willing to make story posts on my Instagram to promote a product or brand."
+        },
+        {
+          "id": "9",
+          "heading": "Promotional Video",
+          "handle": "Youtube",
+          "price": 30000,
+          "about":
+            "A video created by me based on your campaign's goals. It's then posted on my TikTok (71K followers) as well as my IG stories."
+        }
+      ]
+    },
+    {
+      "id": "895632156",
+      "email": "farhankola432d@hotmail.com",
+      "profileImg": {
+        "id": "74102",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/25754/16292326235512416.jpg"
+      },
+      "coverImg": {
+        "id": "2345rtgfds",
+        "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/25754/16292326236609192.jpg"
+      },
+      "isFeatured": true,
+      "username": "farhan-kala",
+      "img": [
+        {
+          "id": "4567uhg",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/25754/16292326240976753.jpg"
+        },
+        {
+          "id": "8745120",
+          "url": "https://d5ik1gor6xydq.cloudfront.net/sellers/25754/1629232624259536.jpg"
+        }
+      ],
+      "about":
+        "My name is Lee and my content consists of impressive/funny breaking (dance) videos. I’m active on Instagram where a lot of my followers (18.7K) are young dancers that are mainly from Europe. Besides Instagram I also have a Tiktok account with 580,1K followers.",
+      "heading":
+        "Professional Dancer // Athlete // Content Creator",
+      "name": "Lee",
+      "address": "Amsterdam, Netherlands",
+      "handles": [
+        {
+          "name": "instagram",
+          "url": "https://www.instagram.com/test.lee/"
+        }
+      ],
+      "packages": [
+        {
+          "id": "8965410",
+          "heading": "Instagram Feed Post - PHOTO",
+          "handle": "Instagram",
+          "price": 2500,
+          "about":
+            "I will create an Instagram post capturing your product and speaking about the product in the caption. I'm also able to tag your page in the photo if needed!"
+        },
+        {
+          "id": "5465",
+          "heading": "Instagram Feed Post - VIDEO 5-60sec",
+          "handle": "Instagram",
+          "price": 5000,
+          "about":
+            "I will make a dance video where I promote the product in a creative way. Also this includes a caption where I talk about the product. I’m also able to tag your page in the caption if needed!."
+        }
+      ]
+    }
+]
