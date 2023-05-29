@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+  nginx:
+    depends_on:
+      - backend
+    restart: always # because it is routing traffic to our entire app
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - '80:80'
+
+  backend:
+    build:
+      context: ./server/
+      dockerfile: Dockerfile
+    ports:
+      - '4000:4000'
+    restart: on-failure
+    container_name: backend
+    volumes:
+      - /app/node_modules 
+
+  mongo:
+    image: 'mongo'
+    container_name: 'mongo-db'
+    ports:
+      - '27017-27019:27017-27019'
+    volumes: 
+      - mongodb_data:/data/db
+    networks:
+      - node-webapp-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  node-webapp-network:
+    driver: bridge
+
+

@@ -1,21 +1,23 @@
 # Stage 1: Build the React app
 FROM node:14-alpine as build
 
+# Set the working directory inside the container
 WORKDIR /app
 
+# Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
-RUN npm ci --only=production
+# Install project dependencies
+RUN npm install --production
 
+# Copy the rest of the application code
 COPY . .
 
+# Build the React application
 RUN npm run build
 
-# Stage 2: Serve the production build using Nginx
-FROM nginx:alpine
+# Expose the container port (adjust if necessary)
+EXPOSE 3000
 
-COPY --from=build /app/build /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Start the application
+CMD [ "npm", "start" ]

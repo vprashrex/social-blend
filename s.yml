@@ -1,22 +1,7 @@
 version: "3"
 services:
-
-  frontend:
-    container_name: social-frontend
-    image: prashrex/social-frontend
-    restart: always
-    build: 
-      context: ./client/
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    
-    networks:
-      - node-webapp-network
-
   nodeapp:
     container_name: social-backend
-    image: prashrex/social-backend
     restart: always
     build:
       context: ./server/
@@ -25,7 +10,12 @@ services:
       - "4000:4000"
     networks:
       - node-webapp-network
-
+    
+    links:
+      - nodeapp
+    depends_on:
+      - nodeapp
+      
   mongodb:
     container_name: mongodb
     image: mongo:6.0
@@ -33,6 +23,7 @@ services:
       - ~/mongo:/data/db
     ports:
       - "27017:27017"
+
     networks:
       - node-webapp-network
 
