@@ -1,21 +1,37 @@
 # Social-Blend-College
 
-if monogdb is not installed then refer this video for installation
+TO RUN THE PROJECT
+##
 
-<a href="https://www.youtube.com/watch?v=ofme2o29ngU">Video</a>
+IF DOCKER IS NOT INSTALLED
 
-first go to server
+https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=module&_gl=1*12bjv5j*_ga*ODU2ODMzOTk5LjE2NjUyOTU3NTE.*_ga_XJWPQMJYHQ*MTY4NTMzNTYwNC41My4xLjE2ODUzMzU2MjEuNDMuMC4w
 
-**cd server**
 
-**npm install**
 
-**npm run serverStart**
+ONCE DOCKER IS INSTALLED 
+##
 
-then go to client
+JUST GO TO PROJECT DIRECTORY SOCIAL-BLEND-COLLEGE-MAIN
 
-**cd client**
+```bash
+cd SOCIAL-BLEND-COLLEGE-MAIN
+```
 
-**npm install**
+RUN THE BELOW COMMAND
+```bash
+docker-compose build
+```
 
-**npm start**
+ONCE THE PROJECT IS BUILD<br>
+<b>to run the project<b>
+
+```bash
+docker-compose up 
+```
+
+OR IF YOU WANT TO RUN THE PROJECT IN BACKGROUNG<br>
+just enter the below command<br>
+```bash
+docker-compose up -d
+```
