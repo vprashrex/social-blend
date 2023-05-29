@@ -14,7 +14,7 @@ services:
 
   client:
     container_name: social-frontend
-    image: prashrex/social-frontend
+    image: versys.azurecr.io/social-frontend
     restart: always
     build: 
       context: ./client/
@@ -27,7 +27,7 @@ services:
 
   server:
     container_name: social-backend
-    image: prashrex/social-backend
+    image: versys.azurecr.io/social-backend
     restart: always
     build:
       context: ./server/
