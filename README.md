@@ -13,15 +13,25 @@ ONCE DOCKER IS INSTALLED
 ##
 
 JUST GO TO PROJECT DIRECTORY SOCIAL-BLEND-COLLEGE-MAIN
+
+```bash
 cd SOCIAL-BLEND-COLLEGE-MAIN
+```
 
 RUN THE BELOW COMMAND
-## docker-compose build
+```bash
+docker-compose build
+```
 
-ONCE THE PROJECT IS BUILD
-## docker-compose up 
-to run the project
+ONCE THE PROJECT IS BUILD<br>
+<b>to run the project<b>
 
-OR IF YOU WANT TO RUN THE PROJECT IN BACKGROUNG
-just enter the below command
-## docker-compose up -d
+```bash
+docker-compose up 
+```
+
+OR IF YOU WANT TO RUN THE PROJECT IN BACKGROUNG<br>
+just enter the below command<br>
+```bash
+docker-compose up -d
+```
