@@ -48,4 +48,4 @@ jobs:
         app-name: 'versys'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_665b9ce6cb7b4851941cfa823e7a7749 }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_c1516232cb4e46acb765c0861a59d360 }}/mongo:${{ github.sha }}'
+        
