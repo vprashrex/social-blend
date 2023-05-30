@@ -1,20 +1,8 @@
 version: "3"
 services:
-
-  nginx:
-    depends_on:
-      - client
-      - server
-    restart: always
-    build: 
-      dockerfile: Dockerfile
-      context: ./nginx
-    ports:
-      - '80:80'
-
   client:
     container_name: social-frontend
-    image: versys.azurecr.io/social-frontend
+    image: index.docker.io/prashrex/social-frontend
     restart: always
     build: 
       context: ./client/
@@ -27,7 +15,7 @@ services:
 
   server:
     container_name: social-backend
-    image: versys.azurecr.io/social-backend
+    image: index.docker.io/prashrex/social-backend
     restart: always
     build:
       context: ./server/
