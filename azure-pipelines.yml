@@ -7,7 +7,17 @@
     dockerComposeFile: '**/docker-compose.yml'
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'docker-compose up -d'
-
+- task: AzureWebAppContainer@1
+  inputs:
+    azureSubscription: 'Free Trial(5c45ed9d-3a7b-45cc-975c-831ad7348645)'
+    appName: 'versys'
+    containers: |
+      nginx:latest
+      versys.azurecr.io/social-frontend
+      versys.azurecr.io/social-backend
+      mongo:6.0
+    multicontainerConfigFile: '**/docker-compose.yml'
+    containerCommand: 'docker-compose up -d'
 # Build and push an image to Azure Container Registry
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
