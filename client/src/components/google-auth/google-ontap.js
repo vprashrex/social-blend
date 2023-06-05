@@ -13,7 +13,6 @@ function Login_onetap(props) {
           'https://www.googleapis.com/oauth2/v3/userinfo',
           { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } },
         );
-        console.log(userInfo)
         try{
           $.ajax({
             url:"http://127.0.0.1:4000/auth/google-ontap",
@@ -30,10 +29,7 @@ function Login_onetap(props) {
                 setError(payload.message);
                 setTimeout(() => setError(""), 2000);
               }
-              else{
-                setError("email not found!");
-                setTimeout(() => setError(""), 2000);
-              }
+              
             }
           })
         }catch(error){
