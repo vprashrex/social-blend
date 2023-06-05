@@ -77,7 +77,7 @@ export default function CreatorSignUp() {
           <h1>Create Your Page</h1>
           <div className="d-flex flex-column align-items-center gap-3 justify-content-center ">
 
-              <GoogleOAuthProvider clientId={process.env.CLIENT_ID}>
+              <GoogleOAuthProvider clientId="817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com">
                 <Signup username={ username } currentlevel={ currentLevel } type={ "Influencer" } error = { error } setError = { setError } />
               </GoogleOAuthProvider>
             

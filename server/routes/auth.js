@@ -49,10 +49,9 @@ const { OAuth2Client, UserRefreshClient } = require("google-auth-library");
 // router for google-authentication
 /* this is for access_token */
 // google-oauth-client
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
+const CLIENT_ID = "817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com"
+const CLIENT_SECRET = "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"
 // initialize oauth client
-const scopes = process.env.SCOPES
 const oAuth2Client = new OAuth2Client(
   CLIENT_ID,CLIENT_SECRET,"postmessage"
 )

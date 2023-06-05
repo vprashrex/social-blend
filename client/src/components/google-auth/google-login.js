@@ -1,12 +1,27 @@
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-import axios from "axios";
 import $ from 'jquery';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 
 function Signup(props) {
   const { username, currentlevel,type,error,setError } = props;
   const navigate = useNavigate();
+
+  const { authStateChange } = useAuth();
+
+  async function auth(currentLevel){
+    try{
+
+      authStateChange();
+      
+
+    }catch(error){
+      setError(err.response.data.message);
+      return setTimeout(() => setError(""),3000);
+    }
+    navigate(`/create-page/${currentLevel}`);
+  }
 
   const auth_flow = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -25,10 +40,10 @@ function Signup(props) {
         success: function(payload){
           if (payload.message){
             setError(payload.message);
-            setTimeout(() => setError(""), 3000)
+            setTimeout(() => setError(""), 3000);
           }
           else{
-            navigate(`/create-page/${currentlevel}`);
+            auth(currentlevel);
           }
         }
       })
@@ -41,7 +56,7 @@ function Signup(props) {
 
   return (
 
-      <GoogleOAuthProvider clientId={process.env.CLIENT_ID}>
+      <GoogleOAuthProvider clientId="817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com">
         <div>
           <button className="btn btn-dark d-flex gap-2 align-items-center w-100 justify-content-center" onClick={auth_flow}>
               <i className="bi bi-google" />

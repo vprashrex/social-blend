@@ -46,7 +46,7 @@ function Login_onetap(props) {
   });
 
     return(
-        <GoogleOAuthProvider clientId={process.env.CLIENT_ID}>
+        <GoogleOAuthProvider clientId="817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com">
         <div>
             <button className="btn btn-dark d-flex gap-2 align-items-center w-100 justify-content-center" onClick={loggedin}>
                 <i className="bi bi-google" />
