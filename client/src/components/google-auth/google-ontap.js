@@ -6,7 +6,6 @@ import { useState } from "react";
 
 function Login_onetap(props) {
     const { error,setError } = props;
-    const [loading, setLoading] = useState(false);
 
     const loggedin = useGoogleLogin({
       onSuccess: async (tokenResponse) => {      
@@ -14,32 +13,31 @@ function Login_onetap(props) {
           'https://www.googleapis.com/oauth2/v3/userinfo',
           { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } },
         );
+        console.log(userInfo)
         try{
-          setLoading(true);
           $.ajax({
             url:"http://127.0.0.1:4000/auth/google-ontap",
             dataType: "json",
             type: "POST",
             data: JSON.stringify({
-              "email":tokenResponse.data.email,
-              "password":tokenResponse.data.sub,
+              "email":userInfo.data.email,
+              "password":userInfo.data.sub,
             }),
             contentType: "application/json",
             crossDomain: true,
             success: function(payload){
               if (payload.message){
                 setError(payload.message);
-                setTimeout(() => setError(""), 3000)
+                setTimeout(() => setError(""), 2000);
               }
               else{
-                navigate(`/create-page/${currentlevel}`);
-                setLoading(false);
+                setError("email not found!");
+                setTimeout(() => setError(""), 2000);
               }
             }
           })
         }catch(error){
-          setError(error);
-          setTimeout(() => setError(""), 3000)
+          console.log(error);
         }
       },
       onError: errorResponse => console.log(errorResponse),
