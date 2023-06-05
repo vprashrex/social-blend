@@ -4,6 +4,9 @@ import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";
 import { useSignUp } from "../context/SignUpContext";
 import { usePostReq } from "../hooks/usePostReq";
+import Signup from "../components/google-auth/google-login";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 export default function CreatorSignUp() {
   const [alreadyExist, setAlreadyExist] = useState();
@@ -24,6 +27,7 @@ export default function CreatorSignUp() {
   const { loading, error, setError, execute } = usePostReq("auth/signup");
   const { authStateChange } = useAuth();
   const { execute: checkExecute } = usePostReq("auth/check-username");
+  
 
   useEffect(() => {
     checkExecute({
@@ -31,6 +35,7 @@ export default function CreatorSignUp() {
     }).catch((err) => err.response.status === 409 && setAlreadyExist(true));
   }, [username]);
 
+  
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -51,6 +56,7 @@ export default function CreatorSignUp() {
     }
     navigate(`/create-page/${currentLevel}`);
   }
+  
 
   return alreadyExist === true ? (
     <Navigate to="/creator" />
@@ -69,10 +75,15 @@ export default function CreatorSignUp() {
       <div className="mt-3 w-100 d-flex flex-column gap-4 align-items-center justify-content-center container">
         <div className="d-flex flex-column align-items-center gap-3 justify-content-center ">
           <h1>Create Your Page</h1>
-          <button className="btn btn-dark d-flex gap-2 align-items-center w-100 justify-content-center">
-            <i className="bi bi-google" />
-            Continue with Google
-          </button>
+          <div className="d-flex flex-column align-items-center gap-3 justify-content-center ">
+
+              <GoogleOAuthProvider clientId={process.env.CLIENT_ID}>
+                <Signup username={ username } currentlevel={ currentLevel } type={ "Influencer" } error = { error } setError = { setError } />
+              </GoogleOAuthProvider>
+            
+          
+          </div>
+  
         </div>
         <div className="separator">
           <span>or</span>

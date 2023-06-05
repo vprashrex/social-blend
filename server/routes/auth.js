@@ -39,8 +39,144 @@ router.use(express.static(__dirname + "../public"));
 // Middlewares
 const checkAuth = require("../middleware/checkAuth");
 const { upload } = require("../middleware/upload");
+const { OAuth2Client, UserRefreshClient } = require("google-auth-library");
+
 
 /* All Routes for auth */
+
+
+/* ----------------------------------------------------------------------------- */
+// router for google-authentication
+/* this is for access_token */
+// google-oauth-client
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
+// initialize oauth client
+const scopes = process.env.SCOPES
+const oAuth2Client = new OAuth2Client(
+  CLIENT_ID,CLIENT_SECRET,"postmessage"
+)
+
+function base64UrlDecode(str) {
+  // Convert base64 URL-safe encoded string to base64 encoded string
+  const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+
+  // Pad the base64 encoded string if necessary
+  const paddingLength = 4 - (base64.length % 4);
+  const paddedBase64 = base64 + '==='.slice(0, paddingLength);
+
+  // Decode the base64 encoded string
+  const decoded = Buffer.from(paddedBase64, 'base64').toString('utf-8');
+
+  return decoded;
+}
+
+function decodeJWT(token) {
+  const parts = token.split('.');
+  const header = JSON.parse(base64UrlDecode(parts[0]));
+  const payload = JSON.parse(base64UrlDecode(parts[1]));
+
+  return {
+    
+    payload
+  };
+}
+
+router.post("/google",async (req,res) => {
+  try{
+    const { code,username,currentLevel,type } = req.body;
+    const g_token = await oAuth2Client.getToken(code);
+    const decode_info = decodeJWT(g_token.tokens.id_token).payload;
+
+    const name = decode_info.name;
+    const email = decode_info.email;
+    const isVeried = decode_info.email_verified;
+    const sub = decode_info.sub;
+    const about = "Google";
+
+    /* return res.json({"isVerified":decode_info}) */
+  
+    const alreadyExists = await Users.findOne( { email });
+
+    if (alreadyExists != null){
+      
+      return res.json(
+        {message: "Email Already exist"}
+      );
+    }
+
+    const OTP = generateOTP();
+    const emailRes = await sendOTP({ OTP,to: email});
+
+    if (emailRes.rejected.length != 0)
+      return res.status(500).json({
+        message: "Something went wrong! Try again"
+      });
+
+    //try for refresh token ... not tested yet there are some complication
+    // so as for now password ---> sub --> which is an uuid of an email (which will be unique)
+    const user = new Users({
+      fullName: name,
+      username:username,
+      email:email,
+      password: sub,
+      type:type,
+      about:about,
+      currentLevel:currentLevel,
+      isVerified:isVeried,
+      otp: OTP,
+      brandName: type == "Influencer" ? undefined : brandName,
+    });
+
+    await user.save();
+
+    user.password = undefined;
+    user.otp = undefined;
+
+    const token = jwt.sign({user},process.env.JWT_SECRECT_KEY,{
+      expiresIn: "1d",
+    });
+
+    const options = {
+      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+      path: "/",
+    };
+    
+    res.status(200).cookie("token", token, options).json({ success: true });
+  }catch(error){
+    console.log(error);
+    return res.sendStatus(500).json({
+      error,
+      message: "Something went wrong!",
+    });
+  }
+});
+
+router.post("/google-ontap" ,async(req,res) => {
+  const { email,password } = req.body;
+  const isEmailExists = await Users.findOne({ email });
+  if (
+    isEmailExists && password
+  ) {
+    return res.json({
+      message:"Login sucessfuly"
+    })
+  }
+    
+  
+
+})
+
+/* this is for refresh_token */
+router.post("/auth/google/refresh-token",async (req,res) => {
+  const user = new UserRefreshClient(
+    CLIENT_ID,CLIENT_SECRET,req.body.refreshToken,
+  );
+  const { credentials } = await user.refreshAccessToken();
+  res.json(credentials);
+})
+
+/* ---------------------------------------------------------------- */
 
 // Check Username
 router.post("/check-username", async (req, res) => {
@@ -612,5 +748,8 @@ router.post("/reset-password", async (req, res) => {
     return res.status(500).json({ err, message: "Something went wrong!" });
   }
 });
+
+
+
 
 module.exports = router;

@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";
 import { usePostReq } from "../hooks/usePostReq";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import Login_onetap from "../components/google-auth/google-ontap";
 
 export default function Login() {
   const { loading, error, execute, setError } = usePostReq("auth/login");
@@ -24,6 +26,7 @@ export default function Login() {
     }
   }
 
+
   useEffect(() => {
     currentUser &&
       ((currentUser.type === "Influencer" && currentUser.currentLevel === 11) ||
@@ -33,7 +36,6 @@ export default function Login() {
         ? navigate(`/create-page/${currentUser.currentLevel}`)
         : navigate(`/complete-profile/${currentUser.currentLevel}`));
   }, [currentUser, navigate]);
-
   return (
     <>
       {error && (
@@ -54,10 +56,9 @@ export default function Login() {
       >
         <div className="d-flex flex-column align-items-center gap-3 justify-content-center ">
           <h1>Welcome Back</h1>
-          <button className="btn btn-dark d-flex gap-2 align-items-center w-100 justify-content-center">
-            <i className="bi bi-google" />
-            Continue with Google
-          </button>
+          <GoogleOAuthProvider clientId={process.env.CLIENT_ID}>
+            <Login_onetap error = { error } setError = { setError }></Login_onetap>
+          </GoogleOAuthProvider>
         </div>
         <div className="separator">
           <span>or</span>
