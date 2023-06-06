@@ -5,12 +5,15 @@ import { usePostReq } from "../../hooks/usePostReq";
 import { useSignUp } from "../../context/SignUpContext";
 import Loading from "../Loading";
 import ErrorCon from "../ErrorCon";
+import { nanoid } from "nanoid";
 
-function Signup({ username }) {
+function Signup() {
   const navigate = useNavigate();
   const { currentLevel } = useSignUp();
   const { loading, execute, error, setError, setLoading } = usePostReq("auth/google");
   const { authStateChange } = useAuth();
+  const brandName = "brand";
+  const username = brandName.toLowerCase().replaceAll(" ", "-") + "-" + nanoid(5);
 
   const auth_flow = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -20,7 +23,8 @@ function Signup({ username }) {
           code: tokenResponse.code,
           username,
           currentLevel,
-          type: "Influencer",
+          type: "Brand",
+          brandName
         });
         await authStateChange();
       } catch (err) {
@@ -29,7 +33,7 @@ function Signup({ username }) {
       } finally {
         setLoading(false);
       }
-      navigate(`/create-page/${currentLevel}`);
+      navigate(`/complete-profile/${currentLevel}`);
     },
     onError: (error) => {
       setLoading(true);

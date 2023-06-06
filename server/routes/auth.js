@@ -79,7 +79,7 @@ function decodeJWT(token) {
 
 router.post("/google", async (req, res) => {
   try {
-    const { code, username, currentLevel, type } = req.body;
+    const { code, username, currentLevel, type,brandName } = req.body;
     const g_token = await oAuth2Client.getToken(code);
     const decode_info = decodeJWT(g_token.tokens.id_token).payload;
 

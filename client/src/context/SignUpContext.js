@@ -28,6 +28,7 @@ export default function SignUpContext({ children }) {
   const [location, setLocation] = useState(
     currentUser ? currentUser.location : ""
   );
+
   const [summarize, setSummarize] = useState(
     currentUser ? currentUser.heading : ""
   );
