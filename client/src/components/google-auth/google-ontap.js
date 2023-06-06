@@ -1,35 +1,45 @@
-import { GoogleOAuthProvider,useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { usePostReq } from "../../hooks/usePostReq";
+import Loading from "../Loading";
+import ErrorCon from "../ErrorCon";
+import { useNavigate } from "react-router-dom";
 
+function Login_onetap() {
+  const { loading, execute, error, setError, setLoading } =
+    usePostReq("auth/google-ontap");
+  const { authStateChange, currentUser } = useAuth();
+  const navigate = useNavigate();
 
-
-function Login_onetap(props) {
-    const { error,setError,navigate } = props;
-    
-    const { loading,execute } = usePostReq("auth/google-ontap");
-    const { authStateChange, currentUser } = useAuth();
-
-    const loggedin = useGoogleLogin({
-      onSuccess: async (tokenResponse) => {      
-        const userInfo = await axios.get(
-          'https://www.googleapis.com/oauth2/v3/userinfo',
-          { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } },
-        );
-        try{
-          await execute({
-            email: userInfo.data.email,
-            password: userInfo.data.sub,
-          })
-          await authStateChange();
-        }catch(err){
-          setError(err.response.data.message);
-          return setTimeout(() => setError(""), 2000);
-        }
-      },
-      onError: errorResponse => console.log(errorResponse),
+  const loggedin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setLoading(true);
+      const userInfo = await axios.get(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
+      );
+      try {
+        await execute({
+          email: userInfo.data.email,
+          password: userInfo.data.sub,
+        });
+        await authStateChange();
+      } catch (err) {
+        setError(err.response.data.message);
+        return setTimeout(() => setError(""), 2000);
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: (errorResponse) => {
+      setLoading(true);
+      console.log(errorResponse);
+      setError(errorResponse);
+      setTimeout(() => setError(""), 4000);
+      setLoading(false);
+    },
   });
 
   useEffect(() => {
@@ -42,16 +52,23 @@ function Login_onetap(props) {
         : navigate(`/complete-profile/${currentUser.currentLevel}`));
   }, [currentUser, navigate]);
 
-    return(
-        <GoogleOAuthProvider clientId="817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com">
+  return (
+    <>
+      <ErrorCon error={error} />
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
         <div>
-            <button className="btn btn-dark d-flex gap-2 align-items-center w-100 justify-content-center" onClick={loggedin}>
-                <i className="bi bi-google" />
-                Continue with Google
-            </button>
+          <button
+            className="btn btn-dark d-flex gap-2 align-items-center w-100 justify-content-center"
+            onClick={loggedin}
+            disabled={loading}
+          >
+            <i className="bi bi-google" />
+            {loading ? <Loading /> : "Continue with Google"}
+          </button>
         </div>
-        </GoogleOAuthProvider>
-    )   
+      </GoogleOAuthProvider>
+    </>
+  );
 }
 
 export default Login_onetap;

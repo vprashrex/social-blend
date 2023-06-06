@@ -41,50 +41,45 @@ const checkAuth = require("../middleware/checkAuth");
 const { upload } = require("../middleware/upload");
 const { OAuth2Client, UserRefreshClient } = require("google-auth-library");
 
-
 /* All Routes for auth */
-
 
 /* ----------------------------------------------------------------------------- */
 // router for google-authentication
 /* this is for access_token */
 // google-oauth-client
-const CLIENT_ID = "817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com"
-const CLIENT_SECRET = "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"
+const CLIENT_ID =
+  "817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com";
+const CLIENT_SECRET = "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";
 // initialize oauth client
-const oAuth2Client = new OAuth2Client(
-  CLIENT_ID,CLIENT_SECRET,"postmessage"
-)
+const oAuth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, "postmessage");
 
 function base64UrlDecode(str) {
   // Convert base64 URL-safe encoded string to base64 encoded string
-  const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
 
   // Pad the base64 encoded string if necessary
   const paddingLength = 4 - (base64.length % 4);
-  const paddedBase64 = base64 + '==='.slice(0, paddingLength);
+  const paddedBase64 = base64 + "===".slice(0, paddingLength);
 
   // Decode the base64 encoded string
-  const decoded = Buffer.from(paddedBase64, 'base64').toString('utf-8');
+  const decoded = Buffer.from(paddedBase64, "base64").toString("utf-8");
 
   return decoded;
 }
 
 function decodeJWT(token) {
-  const parts = token.split('.');
+  const parts = token.split(".");
   const header = JSON.parse(base64UrlDecode(parts[0]));
   const payload = JSON.parse(base64UrlDecode(parts[1]));
 
   return {
-    
-    payload
+    payload,
   };
 }
 
-
-router.post("/google",async (req,res) => {
-  try{
-    const { code,username,currentLevel,type } = req.body;
+router.post("/google", async (req, res) => {
+  try {
+    const { code, username, currentLevel, type } = req.body;
     const g_token = await oAuth2Client.getToken(code);
     const decode_info = decodeJWT(g_token.tokens.id_token).payload;
 
@@ -95,35 +90,33 @@ router.post("/google",async (req,res) => {
     const about = "Google";
 
     /* return res.json({"isVerified":decode_info}) */
-  
-    const alreadyExists = await Users.findOne( { email });
+    const hashPassword = await bcrypt.hash(sub, 10);
 
-    if (alreadyExists != null){
-      
-      return res.status(409).json(
-        {message: "Email Already exist"}
-      );
+    const alreadyExists = await Users.findOne({ email });
+
+    if (alreadyExists != null) {
+      return res.status(409).json({ message: "Email Already exist" });
     }
 
     const OTP = generateOTP();
-    const emailRes = await sendOTP({ OTP,to: email});
+    const emailRes = await sendOTP({ OTP, to: email });
 
     if (emailRes.rejected.length != 0)
       return res.status(500).json({
-        message: "Something went wrong! Try again"
+        message: "Something went wrong! Try again",
       });
 
     //try for refresh token ... not tested yet there are some complication
     // so as for now password ---> sub --> which is an uuid of an email (which will be unique)
     const user = new Users({
       fullName: name,
-      username:username,
-      email:email,
-      password: sub,
-      type:type,
-      about:about,
-      currentLevel:currentLevel,
-      isVerified:isVeried,
+      username: username,
+      email: email,
+      password: hashPassword,
+      type: type,
+      about: about,
+      currentLevel: currentLevel,
+      isVerified: isVeried,
       otp: OTP,
       brandName: type == "Influencer" ? undefined : brandName,
     });
@@ -133,7 +126,7 @@ router.post("/google",async (req,res) => {
     user.password = undefined;
     user.otp = undefined;
 
-    const token = jwt.sign({user},process.env.JWT_SECRECT_KEY,{
+    const token = jwt.sign({ user }, process.env.JWT_SECRECT_KEY, {
       expiresIn: "1d",
     });
 
@@ -141,9 +134,9 @@ router.post("/google",async (req,res) => {
       expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
       path: "/",
     };
-    
+
     res.status(200).cookie("token", token, options).json({ success: true });
-  }catch(error){
+  } catch (error) {
     console.log(error);
     return res.sendStatus(500).json({
       error,
@@ -154,11 +147,13 @@ router.post("/google",async (req,res) => {
 
 // google-auth login
 
-router.post("/google-ontap" ,async(req,res) => {
-  const { email,password } = req.body;
+router.post("/google-ontap", async (req, res) => {
+  const { email, password } = req.body;
   const isEmailExists = await Users.findOne({ email });
-  if ( isEmailExists && password == isEmailExists.password)
-  {
+  if (
+    isEmailExists &&
+    (await bcrypt.compare(password, isEmailExists.password))
+  ) {
     isEmailExists.type == "Influencer"
       ? await Influencers.updateOne(
           {
@@ -171,39 +166,47 @@ router.post("/google-ontap" ,async(req,res) => {
           { $set: { lastOnline: new Date().getTime() } }
         );
 
-    const userData = isEmailExists.type == "Influencer"
+    const userData =
+      isEmailExists.type == "Influencer"
         ? await Influencers.findOne({
-          uid: isEmailExists._id,
-        })
+            uid: isEmailExists._id,
+          })
         : await Brand.findOne({ uid: isEmailExists._id });
-
-    const token = jwt.sign({ user: userData }, process.env.JWT_SECRECT_KEY, {
-      expiresIn: "1d",
-    });
+    isEmailExists.password = undefined;
+    isEmailExists.otp = undefined;
+    const token = jwt.sign(
+      { user: userData === null ? isEmailExists : userData },
+      process.env.JWT_SECRECT_KEY,
+      {
+        expiresIn: "1d",
+      }
+    );
     const options = {
       expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
       path: "/",
     };
 
-    return res.status(200).cookie("token",token,options).json({success:true});
-    
-    }
-  else{
+    return res
+      .status(200)
+      .cookie("token", token, options)
+      .json({ success: true });
+  } else {
     return res.status(401).json({
-      message:"Invalid Credential"
-    })
+      message: "Invalid Credential",
+    });
   }
-
-})
+});
 
 /* this is for refresh_token */
-router.post("/auth/google/refresh-token",async (req,res) => {
+router.post("/auth/google/refresh-token", async (req, res) => {
   const user = new UserRefreshClient(
-    CLIENT_ID,CLIENT_SECRET,req.body.refreshToken,
+    CLIENT_ID,
+    CLIENT_SECRET,
+    req.body.refreshToken
   );
   const { credentials } = await user.refreshAccessToken();
   res.json(credentials);
-})
+});
 
 /* ---------------------------------------------------------------- */
 
@@ -615,9 +618,15 @@ router.post("/login", async (req, res) => {
               uid: isEmailExists._id,
             })
           : await Brand.findOne({ uid: isEmailExists._id });
-      const token = jwt.sign({ user: userData }, process.env.JWT_SECRECT_KEY, {
-        expiresIn: "1d",
-      });
+      isEmailExists.password = undefined;
+      isEmailExists.otp = undefined;
+      const token = jwt.sign(
+        { user: userData === null ? isEmailExists : userData },
+        process.env.JWT_SECRECT_KEY,
+        {
+          expiresIn: "1d",
+        }
+      );
       const options = {
         expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
         path: "/",
@@ -777,8 +786,5 @@ router.post("/reset-password", async (req, res) => {
     return res.status(500).json({ err, message: "Something went wrong!" });
   }
 });
-
-
-
 
 module.exports = router;
