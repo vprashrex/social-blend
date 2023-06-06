@@ -1,11 +1,16 @@
 import { GoogleOAuthProvider,useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import $ from 'jquery';
-import { useState } from "react";
+import { useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { usePostReq } from "../../hooks/usePostReq";
+
 
 
 function Login_onetap(props) {
-    const { error,setError } = props;
+    const { error,setError,navigate } = props;
+    
+    const { loading,execute } = usePostReq("auth/google-ontap");
+    const { authStateChange, currentUser } = useAuth();
 
     const loggedin = useGoogleLogin({
       onSuccess: async (tokenResponse) => {      
@@ -14,30 +19,28 @@ function Login_onetap(props) {
           { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } },
         );
         try{
-          $.ajax({
-            url:"http://127.0.0.1:4000/auth/google-ontap",
-            dataType: "json",
-            type: "POST",
-            data: JSON.stringify({
-              "email":userInfo.data.email,
-              "password":userInfo.data.sub,
-            }),
-            contentType: "application/json",
-            crossDomain: true,
-            success: function(payload){
-              if (payload.message){
-                setError(payload.message);
-                setTimeout(() => setError(""), 2000);
-              }
-              
-            }
+          await execute({
+            email: userInfo.data.email,
+            password: userInfo.data.sub,
           })
-        }catch(error){
-          console.log(error);
+          await authStateChange();
+        }catch(err){
+          setError(err.response.data.message);
+          return setTimeout(() => setError(""), 2000);
         }
       },
       onError: errorResponse => console.log(errorResponse),
   });
+
+  useEffect(() => {
+    currentUser &&
+      ((currentUser.type === "Influencer" && currentUser.currentLevel === 11) ||
+      (currentUser.type === "Brand" && currentUser.currentLevel === 6)
+        ? navigate(`/${currentUser.username}`)
+        : currentUser.type === "Influencer"
+        ? navigate(`/create-page/${currentUser.currentLevel}`)
+        : navigate(`/complete-profile/${currentUser.currentLevel}`));
+  }, [currentUser, navigate]);
 
     return(
         <GoogleOAuthProvider clientId="817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com">

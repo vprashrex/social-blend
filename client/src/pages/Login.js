@@ -57,7 +57,7 @@ export default function Login() {
         <div className="d-flex flex-column align-items-center gap-3 justify-content-center ">
           <h1>Welcome Back</h1>
           <GoogleOAuthProvider clientId="817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com">
-            <Login_onetap error = { error } setError = { setError }></Login_onetap>
+            <Login_onetap error = { error } setError = { setError } navigate = { navigate }></Login_onetap>
           </GoogleOAuthProvider>
         </div>
         <div className="separator">
