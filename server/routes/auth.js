@@ -157,36 +157,36 @@ router.post("/google",async (req,res) => {
 router.post("/google-ontap" ,async(req,res) => {
   const { email,password } = req.body;
   const isEmailExists = await Users.findOne({ email });
-  if (
-    isEmailExists && password
-  ) {
+  if ( isEmailExists && password == isEmailExists.password)
+  {
     isEmailExists.type == "Influencer"
-        ? await Influencers.updateOne(
-            {
-              uid: isEmailExists._id,
-            },
-            { $set: { lastOnline: new Date().getTime() } }
-          )
-        : await Brand.updateOne(
-            { uid: isEmailExists._id },
-            { $set: { lastOnline: new Date().getTime() } }
-          );
-
-      const userData = isEmailExists.type == "Influencer"
-          ? await Influencers.findOne({
+      ? await Influencers.updateOne(
+          {
             uid: isEmailExists._id,
-          })
-          : await Brand.findOne({ uid: isEmailExists._id });
+          },
+          { $set: { lastOnline: new Date().getTime() } }
+        )
+      : await Brand.updateOne(
+          { uid: isEmailExists._id },
+          { $set: { lastOnline: new Date().getTime() } }
+        );
 
-      const token = jwt.sign({ user: userData }, process.env.JWT_SECRECT_KEY, {
-        expiresIn: "1d",
-      });
-      const options = {
-        expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-        path: "/",
-      };
+    const userData = isEmailExists.type == "Influencer"
+        ? await Influencers.findOne({
+          uid: isEmailExists._id,
+        })
+        : await Brand.findOne({ uid: isEmailExists._id });
 
-      return res.status(200).cookie("token",token,options).json({success:true});
+    const token = jwt.sign({ user: userData }, process.env.JWT_SECRECT_KEY, {
+      expiresIn: "1d",
+    });
+    const options = {
+      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+      path: "/",
+    };
+
+    return res.status(200).cookie("token",token,options).json({success:true});
+    
     }
   else{
     return res.status(401).json({
