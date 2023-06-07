@@ -7,7 +7,7 @@ import ErrorCon from "../ErrorCon";
 import SignUpIndicator from "./SignUpIndicator";
 
 export default function Location() {
-  const { location, setLocation, setCurrentLevel, currentLevel, data } =
+  const { brandName, setBrandName, setCurrentLevel, currentLevel, data } =
     useSignUp();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ export default function Location() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
+      console.log(brandName);
       await addData(data);
-
       setCurrentLevel((prev) => prev + 1);
     } catch {
       return setTimeout(() => setError(""), 2000);
@@ -40,13 +40,13 @@ export default function Location() {
       <form onSubmit={handleSubmit} className="width-60-form">
         <SignUpIndicator />
         <div className="d-flex flex-column">
-          <h3 className="fw-bold">Enter the name of your brand</h3>
+          <h3 className="fw-bold">Brand Name</h3>
           <input
             required
             value={brandName}
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e) => setBrandName(e.target.value)}
             type="text"
-            placeholder="City - Enter first 3 letters and select from dropdown"
+            placeholder="Enter the Name of your Brand!"
             className="my-3 py-2 form-control"
           />
           <button

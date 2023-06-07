@@ -22,6 +22,8 @@ export default function Gender() {
       await addData(data);
 
       setCurrentLevel((prev) => prev + 1);
+      console.log(prev);
+
     } catch {
       return setTimeout(() => setError(""), 2000);
     }

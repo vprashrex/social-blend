@@ -20,6 +20,7 @@ function Login_onetap() {
         "https://www.googleapis.com/oauth2/v3/userinfo",
         { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
       );
+      console.log(userInfo);
       try {
         await execute({
           email: userInfo.data.email,

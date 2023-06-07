@@ -77,21 +77,14 @@ function decodeJWT(token) {
   };
 }
 
+
+
 router.post("/google", async (req, res) => {
   try {
-    const { code, username, currentLevel, type,brandName } = req.body;
-    const g_token = await oAuth2Client.getToken(code);
-    const decode_info = decodeJWT(g_token.tokens.id_token).payload;
-
-    const name = decode_info.name;
-    const email = decode_info.email;
-    const isVeried = decode_info.email_verified;
-    const sub = decode_info.sub;
+    const { name,email, username, currentLevel, type,sub,isVerified,brandName } = req.body;
+    
     const about = "Google";
-
-    /* return res.json({"isVerified":decode_info}) */
     const hashPassword = await bcrypt.hash(sub, 10);
-
     const alreadyExists = await Users.findOne({ email });
 
     if (alreadyExists != null) {
@@ -116,7 +109,7 @@ router.post("/google", async (req, res) => {
       type: type,
       about: about,
       currentLevel: currentLevel,
-      isVerified: isVeried,
+      isVerified: isVerified,
       otp: OTP,
       brandName: type == "Influencer" ? undefined : brandName,
     });
@@ -322,6 +315,9 @@ router.post("/resend-email", checkAuth, async (req, res) => {
   }
 });
 
+
+
+
 router.get("/check-auth", checkAuth, (req, res) => {
   const currentUser = req.user;
   return res.status(200).json(currentUser);
@@ -436,6 +432,7 @@ router.post("/verify-otp", checkAuth, async (req, res) => {
 router.post("/add-data-influencer", checkAuth, async (req, res) => {
   const {
     currentLevel,
+    isVerified,
     about,
     location,
     heading,
@@ -449,6 +446,8 @@ router.post("/add-data-influencer", checkAuth, async (req, res) => {
   const { uid, email } = req.user;
 
   try {
+    
+
     await Users.updateOne(
       { _id: uid },
       { currentLevel: currentLevel === 11 ? 11 : currentLevel + 1 }
@@ -484,20 +483,21 @@ router.post("/add-data-influencer", checkAuth, async (req, res) => {
 
 // Add Brand Data In DB
 router.post("/add-data-brand", checkAuth, async (req, res) => {
-  const { currentLevel, location, heading, handles, niches } = req.body;
-  const { uid, email } = req.user;
+  const { currentLevel, location,brandName, heading, handles, niches } = req.body;
+  const { uid, email,currentUser } = req.user;
 
   try {
     await Users.updateOne(
       { _id: uid },
-      { currentLevel: currentLevel === 6 ? 6 : currentLevel + 1 }
+      { currentLevel: currentLevel === 7 ? 7 : currentLevel + 1 }
     );
     await Brand.updateOne(
       { uid },
       {
         $set: {
-          currentLevel: currentLevel === 6 ? 6 : currentLevel + 1,
+          currentLevel: currentLevel === 7 ? 7 : currentLevel + 1,
           location,
+          brandName,
           heading,
           handles,
           niches,
@@ -510,7 +510,7 @@ router.post("/add-data-brand", checkAuth, async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).js4on({
+    return res.status(500).json({
       err,
       message: "Something went wrong!",
     });

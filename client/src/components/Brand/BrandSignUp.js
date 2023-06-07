@@ -27,9 +27,6 @@ export default function BrandSignUp() {
   const { authStateChange } = useAuth();
   const navigate = useNavigate();
 
-
-  
-
   async function handleSubmit(e) {
     e.preventDefault();
     const username = brandName.toLowerCase().replaceAll(" ", "-") + "-" + nanoid(5);

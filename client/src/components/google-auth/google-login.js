@@ -5,31 +5,46 @@ import { usePostReq } from "../../hooks/usePostReq";
 import { useSignUp } from "../../context/SignUpContext";
 import Loading from "../Loading";
 import ErrorCon from "../ErrorCon";
+import axios from "axios";
 
 function Signup({ username }) {
   const navigate = useNavigate();
-  const { currentLevel } = useSignUp();
   const { loading, execute, error, setError, setLoading } = usePostReq("auth/google");
   const { authStateChange } = useAuth();
+  const { currentLevel,setCurrentLevel } =  useSignUp();
 
   const auth_flow = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      try {
-        setLoading(true);
-        await execute({
-          code: tokenResponse.code,
-          username,
-          currentLevel,
-          type: "Influencer",
-        });
+      setLoading(true);
+      const userInfo = await axios.get(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
+      );
+      const isVerified = userInfo.data.email_verified;
+      const email = userInfo.data.email;
+      const sub = userInfo.data.sub;
+      const name = userInfo.data.name;
+
+      try{
+        await execute(
+          {
+            name,
+            email,
+            username,
+            currentLevel:currentLevel,
+            type:"Influencer",
+            sub,
+            isVerified,
+          }
+        )
         await authStateChange();
-      } catch (err) {
+      } catch(err){
         setError(err.response.data.message);
-        return setTimeout(() => setError(""), 3000);
-      } finally {
+        return setTimeout(()=> setError(""),3000);
+      } finally{
         setLoading(false);
       }
-      navigate(`/create-page/${currentLevel}`);
+      navigate(`/create-page/${currentLevel}`)
     },
     onError: (error) => {
       setLoading(true);
@@ -37,8 +52,7 @@ function Signup({ username }) {
       console.log(error);
       setLoading(false);
       return setTimeout(() => setError(""), 3000);
-    },
-    flow: "credential",
+    }
   });
 
   return (
