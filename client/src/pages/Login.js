@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { usePostReq } from "../hooks/usePostReq";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Login_onetap from "../components/google-auth/google-ontap";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Login() {
   const { loading, error, execute, setError } = usePostReq("auth/login");
@@ -12,13 +13,14 @@ export default function Login() {
   const emailRef = useRef();
   const passRef = useRef();
   const navigate = useNavigate();
+  /* const recaptcha_ref = useRef(); */
+  
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const email = emailRef.current.value;
-    const pass = passRef.current.value;
+    /* const recaptcha_token = await recaptcha_ref.current.execute(); */
     try {
-      await execute({ email, password: pass });
+      await execute({ email, password: pass,recaptcha_token});
       await authStateChange();
     } catch (err) {
       setError(err.response.data.message);
@@ -62,6 +64,7 @@ export default function Login() {
         <div className="separator">
           <span>or</span>
         </div>
+
         <form
           onSubmit={handleSubmit}
           className="d-flex flex-column gap-3 form-signup"
@@ -80,6 +83,11 @@ export default function Login() {
             placeholder="Password"
             ref={passRef}
           />
+          {/* <ReCAPTCHA
+            ref = {recaptcha_ref}
+            sitekey="6Ld24oAmAAAAAA2pHR2xZvxKCmFluH4N-S6djIR6"
+            onResolved={()=>console.log("recaptcha solved!")}
+            size="invisible"/> */}
           <button
             disabled={loading}
             type="submit"
@@ -87,6 +95,7 @@ export default function Login() {
           >
             {loading ? <Loading /> : "Login"}
           </button>
+
         </form>
         <Link className="text-center" to="/forget-password">
           Forget Password?
