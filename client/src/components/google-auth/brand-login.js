@@ -48,7 +48,7 @@ function Signup() {
       } finally{
         setLoading(false);
       }
-      navigate(`/complete-profile/${currentLevel}`);
+      navigate(`/complete-profile/${isVerified ? currentLevel+1:currentLevel}`);
     },
     onError: (error) => {
       setLoading(true);

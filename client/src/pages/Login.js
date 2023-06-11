@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";
 import { usePostReq } from "../hooks/usePostReq";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import Login_onetap from "../components/google-auth/google-ontap";
-import ReCAPTCHA from "react-google-recaptcha";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Login() {
   const { loading, error, execute, setError } = usePostReq("auth/login");
@@ -13,20 +13,33 @@ export default function Login() {
   const emailRef = useRef();
   const passRef = useRef();
   const navigate = useNavigate();
-  /* const recaptcha_ref = useRef(); */
-  
+
+  const [recaptchaResponse, setRecaptchaResponse] = useState('');
+
 
   async function handleSubmit(e) {
     e.preventDefault();
-    /* const recaptcha_token = await recaptcha_ref.current.execute(); */
+    const email = emailRef.current.value;
+    const pass = passRef.current.value;
+
+    console.log(recaptchaResponse)
+    
     try {
-      await execute({ email, password: pass,recaptcha_token});
+      await execute({ email, password: pass });
       await authStateChange();
+
     } catch (err) {
+      console.log(err);
       setError(err.response.data.message);
       return setTimeout(() => setError(""), 2000);
     }
   }
+
+  const handleRecaptchaChange = (response) => {
+    setRecaptchaResponse(response);
+    console.log(response);
+  };
+  
 
   useEffect(() => {
     currentUser &&
@@ -37,6 +50,7 @@ export default function Login() {
         ? navigate(`/create-page/${currentUser.currentLevel}`)
         : navigate(`/complete-profile/${currentUser.currentLevel}`));
   }, [currentUser, navigate]);
+
   return (
     <>
       {error && (
@@ -64,7 +78,6 @@ export default function Login() {
         <div className="separator">
           <span>or</span>
         </div>
-
         <form
           onSubmit={handleSubmit}
           className="d-flex flex-column gap-3 form-signup"
@@ -83,11 +96,13 @@ export default function Login() {
             placeholder="Password"
             ref={passRef}
           />
-          {/* <ReCAPTCHA
-            ref = {recaptcha_ref}
-            sitekey="6Ld24oAmAAAAAA2pHR2xZvxKCmFluH4N-S6djIR6"
-            onResolved={()=>console.log("recaptcha solved!")}
-            size="invisible"/> */}
+
+          <ReCAPTCHA
+              sitekey="6Ld24oAmAAAAAA2pHR2xZvxKCmFluH4N-S6djIR6"
+              onChange={handleRecaptchaChange}
+              size="invisible"
+            />
+     
           <button
             disabled={loading}
             type="submit"
@@ -95,7 +110,6 @@ export default function Login() {
           >
             {loading ? <Loading /> : "Login"}
           </button>
-
         </form>
         <Link className="text-center" to="/forget-password">
           Forget Password?

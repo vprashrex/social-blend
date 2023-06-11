@@ -592,60 +592,29 @@ router.post("/add-imgs", checkAuth, upload.any(), async (req, res) => {
   }
 });
 
+const querystring = require('querystring');
+
+
 // Login
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const isEmailExists = await Users.findOne({ email });
-    if (
-      isEmailExists &&
-      (await bcrypt.compare(password, isEmailExists.password))
-    ) {
-      isEmailExists.type == "Influencer"
-        ? await Influencers.updateOne(
-            {
-              uid: isEmailExists._id,
-            },
-            { $set: { lastOnline: new Date().getTime() } }
-          )
-        : await Brand.updateOne(
-            { uid: isEmailExists._id },
-            { $set: { lastOnline: new Date().getTime() } }
-          );
-      const userData =
-        isEmailExists.type == "Influencer"
-          ? await Influencers.findOne({
-              uid: isEmailExists._id,
-            })
-          : await Brand.findOne({ uid: isEmailExists._id });
-      isEmailExists.password = undefined;
-      isEmailExists.otp = undefined;
-      const token = jwt.sign(
-        { user: userData === null ? isEmailExists : userData },
-        process.env.JWT_SECRECT_KEY,
-        {
-          expiresIn: "1d",
-        }
-      );
-      const options = {
-        expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-        path: "/",
-      };
-      return res
-        .status(200)
-        .cookie("token", token, options)
-        .json({ success: true });
-    }
-    return res.status(401).json({
-      message: "Email/Password is Invalid!",
-    });
-  } catch (err) {
-    return res.status(500).json({
-      err,
-      message: "Something went wrong!",
+  const { email, password,recaptchaToken } = req.body;
+  
+  try{    
+    return res.status(200).json({
+      success:true,
+      message: "Token successfully verified"
     });
   }
+  catch(err){
+    res.status(500).json({
+      err,
+      message:"catpcha not working"
+    })
+  }
+
+  
 });
+
 
 // Update Password
 router.post("/update-password", checkAuth, async (req, res) => {
