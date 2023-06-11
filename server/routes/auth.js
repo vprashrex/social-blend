@@ -597,7 +597,7 @@ const querystring = require('querystring');
 
 // Login
 router.post("/login", async (req, res) => {
-  const { email, password,token } = req.body;
+  const { token } = req.body;
   
   try{    
     const response = await axios.post(

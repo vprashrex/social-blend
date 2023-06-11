@@ -6,17 +6,19 @@ import { usePostReq } from "../hooks/usePostReq";
 import Login_onetap from "../components/google-auth/google-ontap";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ReCAPTCHA from "react-google-recaptcha";
-import $ from 'jquery';
+import axios from "axios";
+
+
 export default function Login() {
   const { loading, error, execute, setError } = usePostReq("auth/login");
   const { authStateChange, currentUser } = useAuth();
   const emailRef = useRef();
   const passRef = useRef();
   const navigate = useNavigate();
-
   const [token, setToken] = useState("");
   const recaptchaRef = useRef();
-
+  const SITE_KEY = process.env.RECAPTCHA_CLIENT_KEY
+  const SECRET_KEY = process.env.RECAPTCHA_CLIENT_SECRET_KEY
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -25,26 +27,23 @@ export default function Login() {
 
     const token = await recaptchaRef.current.executeAsync();
     setToken(token);
-
-    
     
     try {
+      
+      console.log(token)
+      const response = await axios.post('https://www.google.com/recaptcha/api/siteverify', null, {
+        params: {
+          secret: SECRET_KEY,
+          response: token,
+        },
+      });
 
-  
-  
-      /* const { success, score } = response.data;
-  
-      if (success && score >= 0.5) {
-        await execute({ email, password: pass, token });
-        await authStateChange();
-      } else {
-        res.status(401).json({ message:"captcha is working nut score is bad" });
-  
-      } */
+      console.log(response.data);
 
+      
     } catch (err) {
       console.log(err);
-      setError("captcha not working");
+      setError("CAPTCHA NOT WORKING");
       return setTimeout(() => setError(""), 2000);
     }
   }
@@ -59,6 +58,32 @@ export default function Login() {
         ? navigate(`/create-page/${currentUser.currentLevel}`)
         : navigate(`/complete-profile/${currentUser.currentLevel}`));
   }, [currentUser, navigate]);
+
+  useEffect(() => {
+    const loadScriptByURL = (id, url, callback) => {
+      const isScriptExist = document.getElementById(id);
+
+      if (!isScriptExist) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = url;
+        script.id = id;
+        script.onload = function () {
+          if (callback) callback();
+        };
+        document.body.appendChild(script);
+      }
+
+      if (isScriptExist && callback) callback();
+    }
+
+    // load the script by passing the URL
+    loadScriptByURL("recaptcha-key", `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`, function () {
+      console.log("Script loaded!");
+    });
+  }, []);
+
+  
 
 
   return (
