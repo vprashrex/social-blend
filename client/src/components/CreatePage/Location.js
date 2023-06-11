@@ -14,13 +14,20 @@ export default function Location() {
   const { addData, loading, error, setError } = useAddData(
     currentUser.type.toLowerCase()
   );
+  
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       await addData(data);
-
-      setCurrentLevel((prev) => prev + 1);
+      /* if (currentUser.brandName == ""){
+        setCurrentLevel((prev) => prev + 1);
+      }
+      else{
+        setCurrentLevel((prev) => prev + 2);
+      } */
+      setCurrentLevel((prev) => prev + (currentUser.brandName === "" ? 1:2));
+      
     } catch {
       return setTimeout(() => setError(""), 2000);
     }

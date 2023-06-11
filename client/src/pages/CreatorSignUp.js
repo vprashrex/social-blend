@@ -4,6 +4,8 @@ import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";
 import { useSignUp } from "../context/SignUpContext";
 import { usePostReq } from "../hooks/usePostReq";
+import Signup from "../components/google-auth/google-login";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function CreatorSignUp() {
   const [alreadyExist, setAlreadyExist] = useState();
@@ -69,10 +71,11 @@ export default function CreatorSignUp() {
       <div className="mt-3 w-100 d-flex flex-column gap-4 align-items-center justify-content-center container">
         <div className="d-flex flex-column align-items-center gap-3 justify-content-center ">
           <h1>Create Your Page</h1>
-          <button className="btn btn-dark d-flex gap-2 align-items-center w-100 justify-content-center">
-            <i className="bi bi-google" />
-            Continue with Google
-          </button>
+          <div className="d-flex flex-column align-items-center gap-3 justify-content-center ">
+            <GoogleOAuthProvider clientId="817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com">
+              <Signup username={username} />
+            </GoogleOAuthProvider>
+          </div>
         </div>
         <div className="separator">
           <span>or</span>

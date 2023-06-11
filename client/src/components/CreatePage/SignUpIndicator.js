@@ -30,7 +30,7 @@ export default function SignUpIndicator() {
         style={{ backgroundColor: "#d6efe2" }}
         className="text-success px-3 py-2 rounded-pill"
       >
-        {currentLevel}/{currentUser.type === "Brand" ? 5 : 10}
+        {currentLevel}/{currentUser.type === "Brand" ? (currentUser.brandName === "" ? 6:5):10}
       </span>
     </div>
   );

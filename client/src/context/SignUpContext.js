@@ -25,9 +25,11 @@ export default function SignUpContext({ children }) {
     currentUser ? currentUser.about : "default"
   );
   const [pass, setPass] = useState("");
+  
   const [location, setLocation] = useState(
     currentUser ? currentUser.location : ""
   );
+
   const [summarize, setSummarize] = useState(
     currentUser ? currentUser.heading : ""
   );
@@ -70,6 +72,7 @@ export default function SignUpContext({ children }) {
     currentLevel,
     about: description,
     location,
+    brandName,
     heading: summarize,
     gender,
     handles,

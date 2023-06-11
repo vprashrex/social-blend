@@ -5,6 +5,9 @@ import { usePostReq } from "../../hooks/usePostReq";
 import { useAuth } from "../../context/AuthContext";
 import Loading from "../Loading";
 import { useSignUp } from "../../context/SignUpContext";
+import Signup from "../../components/google-auth/brand-login";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 
 export default function BrandSignUp() {
   const {
@@ -26,10 +29,7 @@ export default function BrandSignUp() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    const username =
-      brandName.toLowerCase().replaceAll(" ", "-") + "-" + nanoid(5);
-
+    const username = brandName.toLowerCase().replaceAll(" ", "-") + "-" + nanoid(5);
     try {
       await execute({
         fullName: name,
@@ -65,10 +65,9 @@ export default function BrandSignUp() {
       <div className="w-100 d-flex flex-column gap-4 align-items-center justify-content-center container mt-3">
         <div className="d-flex flex-column align-items-center gap-3 justify-content-center ">
           <h1>Create Your Account</h1>
-          <button className="btn btn-dark d-flex gap-2 align-items-center w-100 justify-content-center">
-            <i className="bi bi-google" />
-            Continue with Google
-          </button>
+          <GoogleOAuthProvider clientId="817711081919-0g171iqdflb2mpkhfhpvmnmbglarng97.apps.googleusercontent.com">
+            <Signup />
+          </GoogleOAuthProvider>
         </div>
         <div className="separator">
           <span>or</span>

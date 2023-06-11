@@ -9,13 +9,14 @@ import SelectNiches from "../CreatePage/SelectNiches";
 import WelcomePage from "../CreatePage/WelcomePage";
 import { Navigate } from "react-router-dom";
 import Summarize from "../CreatePage/Summarize";
+import BrandName from "../CreatePage/brandname";
 
 export default function CompleteProfile() {
   const { level } = useParams();
   const { currentUser } = useAuth();
   return (
     <div className="container get-info-container">
-      {currentUser?.currentLevel === 6 ? (
+      {currentUser?.currentLevel === 7 ? (
         <Navigate to={"/" + currentUser.username} />
       ) : !currentUser ? (
         <Navigate to="/" />
@@ -24,12 +25,14 @@ export default function CompleteProfile() {
       ) : +level === 1 ? (
         <Location />
       ) : +level === 2 ? (
+        <BrandName />
+      ): +level === 3 ? (
         <Summarize />
-      ) : +level === 3 ? (
-        <SocialChannels />
       ) : +level === 4 ? (
-        <SelectNiches />
+        <SocialChannels />
       ) : +level === 5 ? (
+        <SelectNiches />
+      ) : +level === 6 ? (
         <SelectImg />
       ) : (
         <WelcomePage />

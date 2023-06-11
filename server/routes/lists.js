@@ -26,8 +26,11 @@ router.use(express.static(__dirname + "../public"));
 router.get("/get-by-id", checkAuth, async (req, res) => {
   const currentUser = req.user;
   try {
-    const resData = await BrandLists.findOne({ uid: currentUser.uid });
-    res.status(200).json(resData);
+    if (currentUser.type === "Brand") {
+      const resData = await BrandLists.findOne({ uid: currentUser.uid });
+      return res.status(200).json(resData);
+    }
+    return res.status(200).json(null);
   } catch (err) {
     res.status(500).json({ err, message: "Something went wrong!" });
   }
